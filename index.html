@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>XYZ Website</title>
+</head>
+
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+
+<body>
+    <button id="qauth" onclick="login();">Login with QAuth</button>
+    <button id="logout" class="hidden" onclick="qAuthLogoutRequest();">Logout</button><br><br>
+    <div id="qr"></div><br>
+    <span id="container"></span>
+</body>
+
+<script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
+<script src="./axios.js"></script>
+<script src="./qrcode.js"></script>
+
+<script>
+
+    var container = document.getElementById('container');
+    var loginBtn = document.getElementById('qauth');
+    var logoutBtn = document.getElementById('logout');
+
+    function login() {
+
+        document.getElementById('container').innerHTML = 'Waiting for QAuth';
+
+        qAuthLoginRequest(['address', 'credit card']);
+
+    }
+
+    function qAuthWait() {
+
+        container.innerHTML = 'Checking existing token';
+        logoutBtn.classList.add('hidden');
+
+    }
+
+    function qAuthLoggedInCallback(details) {
+
+
+        container.innerHTML = 'Logged in<br>'
+            + details.username + '<br>'
+            + JSON.stringify(details.requestedValues);
+
+        loginBtn.classList.add('hidden');
+        logoutBtn.classList.remove('hidden');
+
+    }
+
+    function qAuthLoggedOutCallback() {
+
+        loginBtn.classList.remove('hidden');
+        logoutBtn.classList.add('hidden');
+        container.innerHTML = 'Logged out'
+
+    }
+
+
+</script>
+
+<script src="./qauth.js"></script>
+
+</html>
